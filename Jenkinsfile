@@ -8,12 +8,13 @@ pipeline {
             steps {
                sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
                sh label: 'Installing bundler gem', script: 'gem install bundler'
-               sh label: '', script: 'export SPRING_SERVER_COMMAND=spring server'
+            //    sh label: '', script: 'export SPRING_SERVER_COMMAND=spring server'
             }
         }
         stage('Install gems') {
             steps {
-                sh label: 'Installing gems', script: 'bundle install --without production'
+                sh label: 'Installing gems', script: 'bundle install --without development production'
+                // sh label: 'uninstalling spring gem', script: 'gem uninstall spring -x -I -q'
             }
         }
         stage('Testing') {
