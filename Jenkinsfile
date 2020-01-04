@@ -1,17 +1,18 @@
 pipeline {
     agent {
-        docker 'ruby:2.3.3-alpine'
+        docker 'ruby:2.3.8'
     }
 
     stages {
-        stage('checkout') {
+        stage('Initial Setup') {
             steps {
-                echo 'checkout stage'
+               sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
+               sh label: 'Installing bundler gem', script: 'gem install bundler' 
             }
         }
-        stage('Install gems and run migrations') {
+        stage('Install gems') {
             steps {
-                echo 'installing gems and running all migrations'
+                sh label: 'Installing gems', script: 'bundle install --without production'
             }
         }
     }  
