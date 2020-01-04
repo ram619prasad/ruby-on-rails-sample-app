@@ -7,6 +7,7 @@ RUN apt-get update && \
     libsqlite3-dev \
     libpq-dev \
     nodejs \
+    postgresql \
     postgresql-client \
     sqlite3 --no-install-recommends && \ 
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
