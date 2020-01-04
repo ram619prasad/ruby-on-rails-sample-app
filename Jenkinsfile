@@ -8,7 +8,7 @@ pipeline {
             steps {
                sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
                sh label: 'Installing bundler gem', script: 'gem install bundler'
-               sh label: '', script: 'postgres --version'
+               sh label: '', script: 'apt-get install postgresql-client'
             //    sh label: 'Installing nodejs required for runtime', script: 'apt-get install nodejs -y'
             //    sh label: '', script: 'export SPRING_SERVER_COMMAND=spring server'
             }
