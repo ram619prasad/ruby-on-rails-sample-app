@@ -7,6 +7,9 @@ pipeline {
         stage('Initial Setup') {
             steps {
                sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
+               sh label: '', script: 'export POSTGRES_USER=postgres'
+               sh label: '', script: 'export POSTGRES_HOST=localhost'
+               sh label: 'Postgres version', script: 'echo postgres --version'
             }
         }
         // stage('Install gems') {
