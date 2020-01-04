@@ -15,5 +15,29 @@ pipeline {
                 sh label: 'Installing gems', script: 'bundle install --without production'
             }
         }
+        stage('Testing') {
+            parallel {
+                stage('Model tests') {
+                    steps {
+                        sh label: 'Model tests', script: 'rails test test/models'
+                    }
+                }
+                stage('Controller tests') {
+                    steps {
+                        sh label: 'Controllers tests', script: 'rails test test/controllers'
+                    }
+                }
+                stage('Mailer tests') {
+                    steps {
+                        sh label: 'Mailer tests', script: 'rails test test/mailers'
+                    }
+                }
+                stage('Integration tests') {
+                    steps {
+                        sh label: 'Integration tests', script: 'rails test test/integraion'
+                    }
+                }
+            }
+        }
     }  
 }
