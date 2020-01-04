@@ -32,7 +32,13 @@ $ bundle install --without production
 Next, migrate the database:
 
 ```
-$ rails db:migrate
+
+export POSTGRES_USER=<user_name>
+export POSTGRES_PASSWORD=<password>
+export POSTGRES_HOST=<host_name>
+export POSTGRES_DB=<db_name>
+
+$ rails db:setup
 ```
 
 Finally, run the test suite to verify that everything is working correctly:
