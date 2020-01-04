@@ -7,7 +7,8 @@ pipeline {
         stage('Initial Setup') {
             steps {
                sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
-               sh label: 'Installing bundler gem', script: 'gem install bundler' 
+               sh label: 'Installing bundler gem', script: 'gem install bundler'
+               sh label: '', script: 'export SPRING_SERVER_COMMAND=spring server'
             }
         }
         stage('Install gems') {
