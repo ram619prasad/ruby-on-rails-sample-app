@@ -8,6 +8,7 @@ pipeline {
             steps {
                sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
                sh label: 'Installing bundler gem', script: 'gem install bundler'
+               sh label: '', script: 'postgres --version'
             //    sh label: 'Installing nodejs required for runtime', script: 'apt-get install nodejs -y'
             //    sh label: '', script: 'export SPRING_SERVER_COMMAND=spring server'
             }
@@ -16,6 +17,11 @@ pipeline {
             steps {
                 sh label: 'Installing gems', script: 'bundle install --without production'
                 // sh label: 'uninstalling spring gem', script: 'gem uninstall spring -x -I -q'
+            }
+        }
+        stage('DB setup for tests') {
+            steps {
+                sh label: 'Test db setup', script: 'rake db:create db:migrate'
             }
         }
         stage('Testing') {
