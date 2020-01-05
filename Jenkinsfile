@@ -18,13 +18,13 @@ pipeline {
                 sh label: 'Ruby version', script: "ruby --version"
             }
         }
-        // stage('DB setup for tests') {
-        //     steps {
-        //         sh label: 'Creating services', script: 'docker ps'
-        //         // sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
-        //         // sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
-        //     }
-        // }
+        stage('DB setup for tests') {
+            steps {
+                sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
+                sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
+                sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
+            }
+        }
         // stage('Testing') {
         //     parallel {
         //         stage('Model tests') {
