@@ -5,23 +5,26 @@ services:
         image: 'docker:dind'
         privileged: true
         ports: 
-            - '2376:2376'
+            - '2375:2375'
         links:
             - socat
         volumes:
             - jenkins-data:/var/jenkins_home
+            - /var/run/docker.sock:/var/run/docker.sock
     socat:
         image: bpack/socat
-        command: TCP4-LISTEN:2376,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock
+        command: TCP4-LISTEN:2375,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
         expose:
-            - "2376"
+            - "2375"
     jenkins:
         image: 'jenkinsci/blueocean'
         privileged: true
         environment:
-            - DOCKER_HOST=tcp://socat:2376
+            - DOCKER_HOST=tcp://socat:2375
+        links:
+            - socat
         ports:
             - '8080:8080'
             - '50000:50000'
@@ -40,7 +43,7 @@ services:
     rails_app:
         build: 
             context: .
-            dockerfile: Dockerfile
+            dockerfile: test.Dockerfile
         ports: 
             - "3000:3000"
         command: bundle exec rails s -p 3000 -b '0.0.0.0'

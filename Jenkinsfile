@@ -20,8 +20,8 @@ pipeline {
         }
         stage('DB setup for tests') {
             steps {
-                sh label: '', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock docker'
-                // sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
+                // sh label: '', script: 'docker ps'
+                sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
                 // sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
                 // sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
             }
