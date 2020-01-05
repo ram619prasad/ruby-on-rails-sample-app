@@ -1,5 +1,7 @@
 FROM ruby:2.3.8
 
+USER root
+
 RUN apt-get update && \
     apt-get install -y build-essential \
     libcurl4-openssl-dev \
@@ -9,10 +11,11 @@ RUN apt-get update && \
     nodejs \
     postgresql \
     postgresql-client \
-    sqlite3 --no-install-recommends && \ 
+    py-pip \
+    python-dev \
+    pip install docker \
+    pip install docker-compose \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-USER root
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
@@ -22,7 +25,7 @@ WORKDIR /app/test
 COPY Gemfile ./
 COPY Gemfile.lock ./
 
-RUN bundle install
+RUN bundle install 
 
 COPY ./ ./
 

@@ -25,7 +25,7 @@ COPY . $APP_PATH
 
 ENV RAILS_ENV development
 
-RUN bin/rake db:migrate 
+# RUN bin/rake db:migrate 
 
 RUN bin/rake assets:precompile
 

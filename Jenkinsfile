@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        docker 'ram619prasad/ror_jenkins_pipeline_sample:v1'
+        docker 'ram619prasad/ror_jenkins_pipeline_sample:v2'
     }
 
     environment {
@@ -26,7 +26,8 @@ pipeline {
         // }
         stage('DB setup for tests') {
             steps {
-                sh label: 'Test db setup', script: 'rails db:create db:migrate'
+                sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
+                sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
             }
         }
         // stage('Testing') {
