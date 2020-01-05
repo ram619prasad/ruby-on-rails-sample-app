@@ -1,35 +1,30 @@
 pipeline {
     agent {
-        docker 'ram619prasad/ror_jenkins_pipeline_sample:v2'
+        docker 'ram619prasad/ror_docker_pipeline:test'
     }
 
     environment {
         RAILS_ENV = 'test'
         POSTGRES_USER = 'postgres'
-        POSTGRES_HOST = 'localhost'
+        POSTGRES_HOST = 'database'
+        // DOCKER_HOST = 'tcp://127.0.0.1:2376'
     }
 
     stages {
-        // stage('Initial Setup') {
-        //     steps {
-        //        sh label: 'Setting up rails test environment', script: 'export RAILS_ENV=test'
-        //     //    sh label: '', script: 'export '
-        //     //    sh label: '', script: 'export 
-        //     //    sh label: 'Postgres version', script: "echo ${postgres --version}"
-        //     }
-        // }
-        // stage('Install gems') {
-        //     steps {
-        //         sh label: 'Installing gems', script: 'bundle install --without production'
-        //         // sh label: 'uninstalling spring gem', script: 'gem uninstall spring -x -I -q'
-        //     }
-        // }
-        stage('DB setup for tests') {
+        stage('Initial Checks') {
             steps {
-                sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
-                sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
+                sh label: 'Docker version', script: "docker --version"
+                sh label: 'Docker Compose version', script: "docker-compose --version"
+                sh label: 'Ruby version', script: "ruby --version"
             }
         }
+        // stage('DB setup for tests') {
+        //     steps {
+        //         sh label: 'Creating services', script: 'docker ps'
+        //         // sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
+        //         // sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
+        //     }
+        // }
         // stage('Testing') {
         //     parallel {
         //         stage('Model tests') {
