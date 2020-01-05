@@ -7,7 +7,7 @@ pipeline {
         RAILS_ENV = 'test'
         POSTGRES_USER = 'postgres'
         POSTGRES_HOST = 'database'
-        // DOCKER_HOST = 'tcp://127.0.0.1:2376'
+        // DOCKER_HOST = 'tcp://localhost:2376'
     }
 
     stages {
@@ -20,9 +20,10 @@ pipeline {
         }
         stage('DB setup for tests') {
             steps {
-                sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
-                sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
-                sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
+                sh label: '', script: 'docker run -v /var/run/docker.sock:/var/run/docker.sock docker'
+                // sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
+                // sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
+                // sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
             }
         }
         // stage('Testing') {
