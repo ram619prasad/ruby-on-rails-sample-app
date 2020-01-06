@@ -21,34 +21,34 @@ pipeline {
         stage('DB setup for tests') {
             steps {
                 sh label: '', script: 'docker ps'
-                // sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
-                // sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
-                // sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
+                sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
+                sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
+                sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
             }
         }
-        // stage('Testing') {
-        //     parallel {
-        //         stage('Model tests') {
-        //             steps {
-        //                 sh label: 'Model tests', script: 'bundle exec rails test test/models'
-        //             }
-        //         }
-        //         stage('Controller tests') {
-        //             steps {
-        //                 sh label: 'Controllers tests', script: 'bundle exec rails test test/controllers'
-        //             }
-        //         }
-        //         stage('Mailer tests') {
-        //             steps {
-        //                 sh label: 'Mailer tests', script: 'bundle exec rails test test/mailers'
-        //             }
-        //         }
-        //         stage('Integration tests') {
-        //             steps {
-        //                 sh label: 'Integration tests', script: 'bundle exec rails test test/integraion'
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Testing') {
+            parallel {
+                stage('Model tests') {
+                    steps {
+                        sh label: 'Model tests', script: 'bundle exec rails test test/models'
+                    }
+                }
+                stage('Controller tests') {
+                    steps {
+                        sh label: 'Controllers tests', script: 'bundle exec rails test test/controllers'
+                    }
+                }
+                stage('Mailer tests') {
+                    steps {
+                        sh label: 'Mailer tests', script: 'bundle exec rails test test/mailers'
+                    }
+                }
+                stage('Integration tests') {
+                    steps {
+                        sh label: 'Integration tests', script: 'bundle exec rails test test/integraion'
+                    }
+                }
+            }
+        }
     }  
 }
