@@ -21,33 +21,35 @@ pipeline {
         stage('DB setup for tests') {
             steps {
                 sh label: '', script: 'docker ps'
-                sh label: 'Creating services', script: 'docker-compose -f test.docker-compose.yml up -d'
+                // sh label: 'Creating services', script: 'docker-compose up -d'
+                sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:drop'
                 sh label: 'Creating the test database', script: 'docker-compose run rails_app rails db:create'
                 sh label: 'Migrating the test database', script: 'docker-compose run rails_app rails db:migrate'
             }
         }
-        stage('Testing') {
-            parallel {
-                stage('Model tests') {
-                    steps {
-                        sh label: 'Model tests', script: 'bundle exec rails test test/models'
-                    }
-                }
-                stage('Controller tests') {
-                    steps {
-                        sh label: 'Controllers tests', script: 'bundle exec rails test test/controllers'
-                    }
-                }
-                stage('Mailer tests') {
-                    steps {
-                        sh label: 'Mailer tests', script: 'bundle exec rails test test/mailers'
-                    }
-                }
-                stage('Integration tests') {
-                    steps {
-                        sh label: 'Integration tests', script: 'bundle exec rails test test/integraion'
-                    }
-                }
+        stage('Model tests') {
+            steps {
+                sh label: 'Model tests', script: 'docker-compose run rails_app rails test test/models'
+            }
+        }
+        stage('Controller tests') {
+            steps {
+                sh label: 'Controllers tests', script: 'docker-compose run rails_app rails test test/controllers'
+            }
+        }
+        stage('Mailer tests') {
+            steps {
+                sh label: 'Mailer tests', script: 'docker-compose run rails_app rails test test/mailers'
+            }
+        }
+        stage('Integration tests') {
+            steps {
+                sh label: 'Integration tests', script: 'docker-compose run rails_app rails test test/integration'
+            }
+        }
+        stage('Stopping all services') {
+            steps {
+                sh label: 'Stopping services', script: 'docker-compose down --remove-orphans'
             }
         }
     }  
